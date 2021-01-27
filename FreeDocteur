@@ -1,0 +1,231 @@
+
+SERVICE AUTH
+
+1- Avoir une collection Structure { les infos d'une structure}
+
+2- Authentifacation en deux étapes
+
+3- 
+
+
+firstName
+lastName
+phoneNumber
+email
+password
+address
+status ( DISABLED,ACTIVED )
+state ( PAYED, NOT_PAYED )
+tokenForSetting
+role (SUPER_ADMIN,ADMIN,SECRETAIRE,MEDECIN,PATIENT)
+description
+specialite
+created_at
+updated_at
+Structure
+nationality
+indicatif
+country{}
+homeworking
+email_home_working
+phone_home_working
+subscription[{}]
+photo
+isDeleted
+assurance{ObjectID}
+assurance_tpc
+timestamp
+
+-----------------------------------------------------------------------
+
+- Assurance
+name
+adresse
+numberphone
+email
+timestamp
+photo
+
+---------------------------------------------------------------------------
+- Token
+
+token
+date
+
+---------------------------------------------------------------------------
+- Structure
+
+name
+address
+phoneNumber
+description
+email
+photo
+isDeleted
+timestamp
+
+------------------------------------
+ compatibility Bill Storage
+- Bills
+
+
+structure  
+medecin {ObjectID}
+patient {ObjectID}
+appointementNames // Type de rendez vous
+timestamp
+date_appointement // date de rdv
+assurance
+amount_brute
+assurance_tpc
+
+
+
+-----------------------------------------------------------------------------
+
+ Order-storage
+- Orders
+
+
+stucture 
+medecin {ObjectID}
+patient {ObjectID}
+drugs [{
+  name
+  frequency
+  tags
+  ToBeCareful
+}] 
+
+timestamp
+
+-------------------------------------------------------------------------------
+- Notification Storage
+patient [{ObjectID}]
+fromwho {ObjectID}]
+timestamp
+typeNotification
+
+- Sms
+
+message
+whereWho  [{phoneNumber}]
+spediteur {ObjectID}
+type_sms [appointement_alertn, message]
+date_expedition
+timestamp
+
+
+------------------------------------------------------------------------------
+
+
+- Mailing
+
+message
+whereWho  [{ObjectID}]
+spediteur {ObjectID}
+type_mailing [mailing_alert, mail]
+date_expedition
+timestamp
+
+
+-------------------------------------------------------------------------------
+
+- Call video & Messageri
+
+
+- history
+ appointement {ObjectID}
+ date
+ rate {ObjectID}
+ timestamp
+
+- Messagerie
+    patient
+    medecin
+    message
+    sendBy
+    seeBy
+    timestamp
+    date
+
+-Rate 
+ rates []
+ comments
+ user_id
+ timestamps
+ appointement {ObjectID}
+
+
+--------------------------------------------------------------------------------
+ 
+
+Appointenment Storage
+
+- Appointement
+    patient{ObjectID}
+    medecin{ObjectID}
+    structure {ObjectID}
+    date_appointement
+    type_appointement []
+    appointement_location
+    appointement_sort[PHYSIQUE, VIDEO]
+    timestamps
+
+- Schedul
+    medecin{ObjectID}
+    days[Object] {
+       day[1]
+        hour[
+       [
+        hour_start 
+        hour_end  
+        interval        
+             
+        ],
+        [ hour_start
+          hour_end  
+          interval
+        ]
+      ]
+        
+    }
+    speciality_days[{
+        date
+        hour[ [
+        hour_start 
+        hour_end  
+        interval        
+             
+        ],
+        [ hour_start
+          hour_end  
+          interval
+        ]]
+}]
+    timestamps
+    
+    
+-------------------------------------------------------------------------------
+
+Subscription Storage
+
+- Subscription
+    name
+    price
+    dure   //en heure
+    timestamps
+
+-Subscriber
+    user {ObjectID}
+    subscription {ObjectID}
+    date_start
+    date_end
+    settings
+    timestamps
+
+
+
+
+
+
