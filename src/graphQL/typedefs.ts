@@ -82,6 +82,7 @@ scalar Date;
      getOneSubscriber(id: String): [Subscriber]!
      getSettings: [Settings]!
      getSettingsBySubscriber: [id: Strings]: Settings!
+     getPriceSubscriber(id: String): Number!
 
    }
 
@@ -95,8 +96,8 @@ scalar Date;
        deleteSubscriber(id: String): Boolean!
 
        createSubscription(data: inputSubscription): Subscription!
-       updateSubscription(id: String, data:inputSubscription): Boolean
-       deleteSubscription(id:String): Boolean
+       updateSubscription(id: String, data:inputSubscription): Boolean!
+       deleteSubscription(id:String): Boolean!
    }
 
 `;
