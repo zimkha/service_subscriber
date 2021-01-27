@@ -221,6 +221,7 @@ Subscription Storage
     subscription {ObjectID}
     date_start
     date_end
+    settings
     timestamps
 
 
