@@ -224,6 +224,11 @@ Subscription Storage
     settings
     timestamps
 
+-Payment
+  Subscriber {ObjectID}
+  date_payment
+  timestamp
+
 
 
 
