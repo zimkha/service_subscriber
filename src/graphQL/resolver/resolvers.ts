@@ -2,7 +2,6 @@ import Subscriber from '../../model/Subscriber';
 import Subscripion from '../../model/Subscription';
 import Settings from '../../model/Settings';
 import helpers from '../../helpers/helper';
-import config_variable from '../../config/config.variable';
 import helper from '../../helpers/helper';
 
 export default {
@@ -23,14 +22,14 @@ export default {
         throw new Error(error);
        }
      },
-     async getOneByAttribut(attribut: any){
-       if(attribut.isArray()){
-         if(attribut.length > 1){
-              // Cela veux dire plusieurs parametres sont envoyés
-              // et Que sa peux être []
-         }
-       }
-     }, 
+    //  async getOneByAttribut(attribut: any){
+    //    if(attribut.isArray()){
+    //      if(attribut.length > 1){
+    //           // Cela veux dire plusieurs parametres sont envoyés
+    //           // et Que sa peux être []
+    //      }
+    //    }
+    //  }, 
      async getSubscriptions(){
       try {
          const subscriptions = await Subscripion.find();

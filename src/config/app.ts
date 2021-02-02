@@ -3,6 +3,11 @@ import config from 'config';
 import consola from 'consola';
 import helmet from 'helmet'
 import mongoose from 'mongoose';
+import { ApolloServer } from 'apollo-server-express';
+import typeDefs from '../graphQL/typeDefs';
+import resolvers from '../graphQL/resolver/resolvers';
+
+
 
 const env = config.get('env') as string;
 const port = config.get('PORT') as number;
@@ -29,7 +34,11 @@ export function start(){
           }
         }
         connectDB();
-      app.listen(port,()=>consola.info(`Server running on port ${port}`))    }catch(e){
+       
+        const server = new ApolloServer({ typeDefs ,  resolvers });
+        server.applyMiddleware({app})
+      app.listen(port,()=>consola.info(`Server running on port ${port}${server.graphqlPath}`))
+        }catch(e){
         throw new Error(e.message);
     }
 }
