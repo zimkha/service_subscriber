@@ -16,20 +16,14 @@ export default {
      },
      async getOneSubscriber(id: String) {
        try {
-           const subscriber = await Subscriber.findById({_id: id });
+          
+           const subscriber = await Subscriber.findOne({_id: id });
             return subscriber;
        } catch (error) {
         throw new Error(error);
        }
      },
-    //  async getOneByAttribut(attribut: any){
-    //    if(attribut.isArray()){
-    //      if(attribut.length > 1){
-    //           // Cela veux dire plusieurs parametres sont envoyés
-    //           // et Que sa peux être []
-    //      }
-    //    }
-    //  }, 
+  
      async getSubscriptions(){
       try {
          const subscriptions = await Subscripion.find();

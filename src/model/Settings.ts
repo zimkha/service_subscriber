@@ -10,7 +10,8 @@ const SettingsSchema = new Schema({
   give_consultation_note: {type: Boolean, default: false},
   prescription_editing: {type: Boolean, default: false},
   appointment_notification_sms: {type: Boolean, default: false},
-  billing_sms: {type: Boolean, default: false}
+  billing_sms: {type: Boolean, default: false},
+  teleconsultation_medical : {type: Boolean, default: false}
 
 }, {timestamps: true});
 

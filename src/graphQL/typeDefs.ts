@@ -76,13 +76,13 @@ scalar number
 
    type Query {
    
-     getSubscriptions: [Subscription]!
-     getOneSubscription(id: String): [Subscription]!
-     getSubscribers: [Subscriber]!
-     getOneSubscriber(id: String): [Subscriber]!
+     getSubscriptions: [Subscription]
+     getOneSubscription(id: String): [Subscription]
+     getSubscribers: [Subscriber]
+     getOneSubscriber(id: String): [Subscriber]
      getSettings: [Settings]!
-     getSettingsBySubscriber(id: String): Settings!
-     getPriceSubscriber(id: String): number!
+     getSettingsBySubscriber(id: String): Settings
+     getPriceSubscriber(id: String): number
 
    }
 
