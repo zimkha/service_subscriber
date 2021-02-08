@@ -12,7 +12,6 @@ const SettingsSchema = new Schema({
   appointment_notification_sms: {type: Boolean, default: false},
   billing_sms: {type: Boolean, default: false},
   teleconsultation_medical : {type: Boolean, default: false}
-
 }, {timestamps: true});
 
 
