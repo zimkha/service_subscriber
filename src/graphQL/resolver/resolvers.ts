@@ -4,7 +4,11 @@ import Settings from '../../model/Settings';
 import helpers from '../../helpers/helper';
 import helper from '../../helpers/helper';
 
+
+
+
 export default {
+
    Query : {
      async getSubscribers () {
        try {
@@ -14,7 +18,7 @@ export default {
         throw new Error(error);
        }
      },
-     async getOneSubscriber(id: String) {
+     async getOneSubscriber(id: string) {
        try {
           
            const subscriber = await Subscriber.findOne({_id: id });
@@ -81,8 +85,10 @@ export default {
       }
    },
    Mutation: {
-     async createSettings(data: any){
+     async createSettings(root:any, args:any){
        try {
+         let data =  JSON.parse(JSON.stringify(args));
+         console.log(data)
         const toInsert = {
           organize_your_agenda:         data.organize_your_agenda,
           confirm_appointment_requests: data.confirm_appointment_requests,
@@ -108,7 +114,6 @@ export default {
               let res: any;
                 const result = await helpers.helpeMe.check_me(req, res, toInsert);
                 if(result == true) {
-                    // Si tous ce passe bien
                     return await item(toInsert).save();
                 }else
                 {
@@ -118,6 +123,38 @@ export default {
        } catch (error) {
            throw new Error(error);  
        }
-     }
+     },
+    async deleteSettings(id: String){
+      try {
+        const item = await Settings.findOneAndDelete({_id: id});
+        if(!item) {
+          return false;
+        }
+        return true;       
+      } catch (error) {
+        throw new Error(error);
+      }
+   },
+
+   async createSubscriber(data:any){
+
+   },
+   async updateSubscriber(id: String, data :any){
+
+   },
+   async  deleteSubscriber(id: String){
+
+   },
+
+   async createSubscription(data:any){
+
+   },
+   async updateSubscription(id: String, data:any){
+
+   },
+   async deleteSubscription(id: String){
+     
+   }
+
    }
 }

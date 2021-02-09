@@ -8,12 +8,12 @@ import typeDefs from '../graphQL/typeDefs';
 import resolvers from '../graphQL/resolver/resolvers';
 
 
-
 const env = config.get('env') as string;
 const port = config.get('PORT') as number;
 const db = config.get('MONGO_URL') as string;
 export function start(){
     const app: Application = express();
+ 
     try{
         if(env==="production"){
             app.use(helmet());
@@ -35,7 +35,14 @@ export function start(){
         }
         connectDB();
        
-        const server = new ApolloServer({ typeDefs ,  resolvers });
+        const server = new ApolloServer({ 
+          typeDefs ,
+            resolvers,
+            context:({
+              header: {
+                "Content-Type": "application/json"
+              }
+            }) });
         server.applyMiddleware({app})
       app.listen(port,()=>consola.info(`Server running on port ${port}${server.graphqlPath}`))
         }catch(e){

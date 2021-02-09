@@ -1,4 +1,6 @@
 import { gql } from 'apollo-server-express';
+const { GraphQLScalarType, Kind } = require('graphql');
+
 
 
 export default gql `
@@ -48,15 +50,15 @@ scalar number
     date_created: Date!
    }
    input inputSetting{
-    organize_your_agenda: Boolean!
-    confirm_appointment_requests: Boolean!
-    consult_the_health_record: Boolean!
-    reminder_email : Boolean!
-    reminder_sms: Boolean!
-    give_consultation_note: Boolean!
-    prescription_editing: Boolean!
-    appointment_notification_sms: Boolean!
-    billing_sms: Boolean!
+    organize_your_agenda: Boolean
+    confirm_appointment_requests: Boolean
+    consult_the_health_record: Boolean
+    reminder_email : Boolean
+    reminder_sms: Boolean
+    give_consultation_note: Boolean
+    prescription_editing: Boolean
+    appointment_notification_sms: Boolean
+    billing_sms: Boolean
    }
 
    input inputSubscription {
@@ -70,8 +72,7 @@ scalar number
    input inputSubscriber {
     date_start: Date
     date_end: Date
-    status: Boolean!
-   
+    status: Boolean
    }
 
    type Query {
@@ -87,11 +88,11 @@ scalar number
    }
 
    type Mutation {
-       createSettings(data: inputSetting): Boolean!
+       createSettings(data: inputSetting): Boolean
        updateSettings(id: String, data:inputSetting): [Settings]!
        deleteSettings(id: String): Boolean!
 
-       createSubsciber(data: inputSubscriber): Boolean!
+       createSubscriber(data: inputSubscriber): Boolean!
        updateSubscriber(id: String, data :inputSubscriber): Boolean!
        deleteSubscriber(id: String): Boolean!
 
@@ -101,3 +102,20 @@ scalar number
    }
 
 `;
+
+const dateScalar = new GraphQLScalarType({
+  name: 'Date',
+  description: 'Date custom scalar type',
+  serialize(value:any) {
+    return value.getTime(); // Convert outgoing Date to integer for JSON
+  },
+  parseValue(value:any) {
+    return new Date(value); // Convert incoming integer to Date
+  },
+  parseLiteral(ast:any ) {
+    if (ast.kind === Kind.INT) {
+      return parseInt(ast.value, 10); // Convert hard-coded AST string to type expected by parseValue
+    }
+    return null; // Invalid hard-coded value (not an integer)
+  },
+});
