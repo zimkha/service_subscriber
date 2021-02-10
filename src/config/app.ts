@@ -44,7 +44,7 @@ export function start(){
               }
             }) });
         server.applyMiddleware({app})
-      app.listen(port,()=>consola.info(`Server running on port ${port}${server.graphqlPath}`))
+      app.listen(port,()=>consola.info(`🚀 Server running on port ${port}${server.graphqlPath}`))
         }catch(e){
         throw new Error(e.message);
     }

@@ -6,7 +6,7 @@ export default {
    * tableau donnné en parametre est complet
    */
    helpeMe: {
-        async  check_me(req: any, res: any, data: any) {
+        async  check_me(data: any) {
           let err = [];
            if(!data.organize_your_agenda || data.organize_your_agenda==undefined){
               let item = 'enable to find attribut organize_your_agenda'
@@ -45,7 +45,7 @@ export default {
             err.push(item);
           }
            if(err.length >= 1){
-            return res.status(401).send(JSON.stringify(err))
+            return false;
            }
            else{
              return true;

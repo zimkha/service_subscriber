@@ -1,15 +1,34 @@
 import Subscriber from '../../model/Subscriber';
 import Subscripion from '../../model/Subscription';
 import Settings from '../../model/Settings';
+import User from '../../model/User';
 import helpers from '../../helpers/helper';
 import helper from '../../helpers/helper';
-
-
+import Payment from '../../model/Payment';
 
 
 export default {
 
    Query : {
+    async getUser(id: String){
+     try {
+        const user = await User.findOne({_id: id});
+        if(user){
+          return user;
+        }
+        return null;
+     } catch (error) {
+       throw new Error(error);  
+     }
+    },
+    async getUsers(){
+      try {
+        const users = await User.find();
+        return users
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
      async getSubscribers () {
        try {
           const subscribers = await  Subscriber.find();
@@ -85,41 +104,27 @@ export default {
       }
    },
    Mutation: {
+    async createUser(data: any){
+   
+      let user =  new User(data);
+      return await user.save();
+  
+     },
+
      async createSettings(root:any, args:any){
        try {
-         let data =  JSON.parse(JSON.stringify(args));
-         console.log(data)
-        const toInsert = {
-          organize_your_agenda:         data.organize_your_agenda,
-          confirm_appointment_requests: data.confirm_appointment_requests,
-          consult_the_health_record:    data.consult_the_health_record,
-          reminder_email :              data.reminder_email,
-          reminder_sms:                 data.reminder_sms,
-          give_consultation_note:       data.give_consultation_note,
-          prescription_editing:         data.prescription_editing,
-          appointment_notification_sms: data.appointment_notification_sms,
-          billing_sms:                  data.billing_sms
-         };
-         const item = new Settings(toInsert);
-         return await item.save();
+            let data       = JSON.parse(JSON.stringify(args))
+            let ojbectData = data.data
+            let item     = await new Settings(ojbectData);
+            return  item.save();
        } catch (error) {
         throw new Error(error);
        }
      }, 
      async updateSettings(id: String, toInsert: any){
        try {
-           let item = Settings.findOne({_id: id});
-            if(item){
-              let req: any;
-              let res: any;
-                const result = await helpers.helpeMe.check_me(req, res, toInsert);
-                if(result == true) {
-                    return await item(toInsert).save();
-                }else
-                {
-                   throw new Error(result);
-                }
-            }
+            let item = await Settings.findOneAndUpdate({_id: id}, toInsert);
+            return item;
        } catch (error) {
            throw new Error(error);  
        }
@@ -127,13 +132,18 @@ export default {
     async deleteSettings(id: String){
       try {
         const item = await Settings.findOneAndDelete({_id: id});
-        if(!item) {
-          return false;
-        }
-        return true;       
+        return item;   
       } catch (error) {
         throw new Error(error);
       }
+   },
+   async createPayment(data:any){
+    try {
+          const payment = new Payment(data)
+          return await payment.save();
+    } catch (error) {
+      throw new Error(error);
+    }
    },
 
    async createSubscriber(data:any){
@@ -154,7 +164,12 @@ export default {
    },
    async deleteSubscription(id: String){
      
-   }
+   },
+ 
+   async deleteUser(id: String){
 
    }
+
+   },
+ 
 }

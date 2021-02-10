@@ -1,27 +1,35 @@
-import { gql } from 'apollo-server-express';
-const { GraphQLScalarType, Kind } = require('graphql');
+import { gql, UserInputError } from 'apollo-server-express';
+
+import dateScalar from './scalar/GraphQLScalarBoolean';
 
 
 
 export default gql `
-scalar Date
+scalar dateScalar
 scalar number
    type Subscription {
     id : ID!
     name: String!
     price: number!
-    dure: Date!
-    createdAt: Date
-    updatedAt: Date
+    dure: dateScalar!
+    createdAt: dateScalar
+    updatedAt: dateScalar
+   }
+
+   type User {
+    _id: ID
+    firstname : String,
+    lastname: String,
    }
    
    type Payment{
-    status:Boolean,
-    date_payment: Date
-    date_created: Date
+     _id: ID
+    subscriber: String
+    date_payment: dateScalar
+    createdAt: dateScalar
    }
    type Settings {
-    id : ID!
+    _id: ID!
     organize_your_agenda: Boolean!
     confirm_appointment_requests: Boolean!
     consult_the_health_record: Boolean!
@@ -35,43 +43,46 @@ scalar number
 
    type Subscriber {
     id : ID!
-    date_start: Date
-    date_end: Date
+    date_start: dateScalar
+    date_end: dateScalar
     status: Boolean!
     settings: Settings
     payments: [Payment]
    }
 
-  
+  input userInput {
+   
+    firstname : String,
+    lastname: String,
+  }
 
    input PaymentInput {
-    status:Boolean!
-    date_payment: Date!
-    date_created: Date!
+    subscriber: String
+    date_payment: dateScalar!
    }
    input inputSetting{
-    organize_your_agenda: Boolean
-    confirm_appointment_requests: Boolean
-    consult_the_health_record: Boolean
-    reminder_email : Boolean
-    reminder_sms: Boolean
-    give_consultation_note: Boolean
-    prescription_editing: Boolean
-    appointment_notification_sms: Boolean
-    billing_sms: Boolean
+    organize_your_agenda: Boolean!
+    confirm_appointment_requests: Boolean!
+    consult_the_health_record: Boolean!
+    reminder_email : Boolean!
+    reminder_sms: Boolean!
+    give_consultation_note: Boolean!
+    prescription_editing: Boolean!
+    appointment_notification_sms: Boolean!
+    billing_sms: Boolean!
    }
 
    input inputSubscription {
     name: String!
     price: number!
-    dure: Date
-    createdAt: Date
-    updatedAt: Date
+    dure: dateScalar
+    createdAt: dateScalar
+    updatedAt: dateScalar
    }
 
    input inputSubscriber {
-    date_start: Date
-    date_end: Date
+    date_start: dateScalar
+    date_end: dateScalar
     status: Boolean
    }
 
@@ -84,13 +95,16 @@ scalar number
      getSettings: [Settings]!
      getSettingsBySubscriber(id: String): Settings
      getPriceSubscriber(id: String): number
+     getUser(id: String): User
+     getUsers: [User]
 
    }
 
    type Mutation {
-       createSettings(data: inputSetting): Boolean
-       updateSettings(id: String, data:inputSetting): [Settings]!
+       createSettings(data: inputSetting): Settings
+       updateSettings(id: String, data:inputSetting): Settings!
        deleteSettings(id: String): Boolean!
+      
 
        createSubscriber(data: inputSubscriber): Boolean!
        updateSubscriber(id: String, data :inputSubscriber): Boolean!
@@ -99,23 +113,13 @@ scalar number
        createSubscription(data: inputSubscription): Subscription!
        updateSubscription(id: String, data:inputSubscription): Boolean!
        deleteSubscription(id:String): Boolean!
+
+       createUser(data: userInput): User
+       deleteUser(id: String): Boolean
+       createPayment(data: PaymentInput): Payment
+
+
    }
 
 `;
 
-const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
-  serialize(value:any) {
-    return value.getTime(); // Convert outgoing Date to integer for JSON
-  },
-  parseValue(value:any) {
-    return new Date(value); // Convert incoming integer to Date
-  },
-  parseLiteral(ast:any ) {
-    if (ast.kind === Kind.INT) {
-      return parseInt(ast.value, 10); // Convert hard-coded AST string to type expected by parseValue
-    }
-    return null; // Invalid hard-coded value (not an integer)
-  },
-});
