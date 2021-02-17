@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Model } from "mongoose";
 
 
 const SettingsSchema = new Schema({

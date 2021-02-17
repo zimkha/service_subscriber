@@ -8,10 +8,10 @@ export default gql `
 scalar dateScalar
 scalar number
    type Subscription {
-    id : ID!
-    name: String!
-    price: number!
-    dure: dateScalar!
+    _id : ID!
+    name: String
+    price: number
+    dure: string
     createdAt: dateScalar
     updatedAt: dateScalar
    }
@@ -42,7 +42,7 @@ scalar number
    }
 
    type Subscriber {
-    id : ID!
+    _id : ID!
     date_start: dateScalar
     date_end: dateScalar
     status: Boolean!
@@ -51,7 +51,6 @@ scalar number
    }
 
   input userInput {
-   
     firstname : String,
     lastname: String,
   }
@@ -61,23 +60,21 @@ scalar number
     date_payment: dateScalar!
    }
    input inputSetting{
-    organize_your_agenda: Boolean!
-    confirm_appointment_requests: Boolean!
-    consult_the_health_record: Boolean!
-    reminder_email : Boolean!
-    reminder_sms: Boolean!
-    give_consultation_note: Boolean!
-    prescription_editing: Boolean!
-    appointment_notification_sms: Boolean!
-    billing_sms: Boolean!
+    organize_your_agenda: Boolean
+    confirm_appointment_requests: Boolean
+    consult_the_health_record: Boolean
+    reminder_email : Boolean
+    reminder_sms: Boolean
+    give_consultation_note: Boolean
+    prescription_editing: Boolean
+    appointment_notification_sms: Boolean
+    billing_sms: Boolean
    }
 
    input inputSubscription {
     name: String!
     price: number!
     dure: dateScalar
-    createdAt: dateScalar
-    updatedAt: dateScalar
    }
 
    input inputSubscriber {
@@ -92,11 +89,12 @@ scalar number
      getOneSubscription(id: String): [Subscription]
      getSubscribers: [Subscriber]
      getOneSubscriber(id: String): [Subscriber]
-     getSettings: [Settings]!
+     getSettings: [Settings]
      getSettingsBySubscriber(id: String): Settings
      getPriceSubscriber(id: String): number
      getUser(id: String): User
      getUsers: [User]
+     getOneSetting(id: String): Settings
 
    }
 
@@ -110,7 +108,7 @@ scalar number
        updateSubscriber(id: String, data :inputSubscriber): Boolean!
        deleteSubscriber(id: String): Boolean!
 
-       createSubscription(data: inputSubscription): Subscription!
+       createSubscription(data: inputSubscription): Subscription
        updateSubscription(id: String, data:inputSubscription): Boolean!
        deleteSubscription(id:String): Boolean!
 

@@ -2,9 +2,11 @@ import Subscriber from '../../model/Subscriber';
 import Subscripion from '../../model/Subscription';
 import Settings from '../../model/Settings';
 import User from '../../model/User';
-import helpers from '../../helpers/helper';
 import helper from '../../helpers/helper';
 import Payment from '../../model/Payment';
+import UserController from '../../controllers/userController';
+import SettingController from '../../controllers/settingController'
+import SubscriptionController from '../../controllers/subcriptionController';
 
 
 export default {
@@ -21,10 +23,9 @@ export default {
        throw new Error(error);  
      }
     },
-    async getUsers(){
+    async getUsers(parent: any, args: any, context: any, info: any){
       try {
-        const users = await User.find();
-        return users
+         return UserController.getUsers();
       } catch (error) {
         throw new Error(error);
       }
@@ -37,9 +38,9 @@ export default {
         throw new Error(error);
        }
      },
-     async getOneSubscriber(id: string) {
+     async getOneSubscriber(parent: any, args: any, context: any, info: any) {
        try {
-          
+           const id = args._id;           
            const subscriber = await Subscriber.findOne({_id: id });
             return subscriber;
        } catch (error) {
@@ -47,7 +48,7 @@ export default {
        }
      },
   
-     async getSubscriptions(){
+     async getSubscriptions(parent: any, args: any, context: any, info: any){
       try {
          const subscriptions = await Subscripion.find();
          return subscriptions
@@ -56,13 +57,15 @@ export default {
       }
      }, 
      async getOneSubscription(id: String){
+       
        const subscripion = await Subscripion.findById({_id: id});
        return subscripion;
      },
      async getSettings(){
       try {
-        const settints = await Settings.find();
-        return settints
+        const settings = await Settings.find();
+        console.log(settings)
+        return settings
      } catch (error) {
        throw new Error(error);
      }
@@ -101,41 +104,51 @@ export default {
         } catch (error) {
           throw new Error(error);
         }
+      },
+      async  getOneSetting(parent: any, args: any, context: any, info: any){  
+         const id = args.id;
+         console.log(" ok je suis la", args);
+         return SettingController.getOneSettings(id);
       }
+
    },
    Mutation: {
-    async createUser(data: any){
-   
-      let user =  new User(data);
-      return await user.save();
+    async createUser(parent: any, args: any, context: any, info: any){
+           let user = JSON.parse(JSON.stringify(args));
+           console.log(user);
+         return await UserController.register(user);
   
      },
 
-     async createSettings(root:any, args:any){
+     async createSettings(parent: any, args: any, context: any, info: any){
        try {
-            let data       = JSON.parse(JSON.stringify(args))
-            let ojbectData = data.data
-            let item     = await new Settings(ojbectData);
-            return  item.save();
+            let data = JSON.parse(JSON.stringify(args));
+            return await SettingController.addSetting(data);
+          
        } catch (error) {
         throw new Error(error);
        }
      }, 
      async updateSettings(id: String, toInsert: any){
        try {
-            let item = await Settings.findOneAndUpdate({_id: id}, toInsert);
-            return item;
+      await Settings.findOneAndUpdate({_id: id}, toInsert,  {upsert: true}, function(err:any, doc:any){
+          if(doc){
+            console.log(doc)
+            return doc;
+          }
+        })
+         
        } catch (error) {
            throw new Error(error);  
        }
      },
-    async deleteSettings(id: String){
-      try {
-        const item = await Settings.findOneAndDelete({_id: id});
-        return item;   
-      } catch (error) {
-        throw new Error(error);
+    async deleteSettings(parent: any, args: any, context: any, info: any){
+        let id = args.id;
+        let response = await SettingController.deleteSettings(id);
+        if(response){
+          return {success: true};
       }
+      return null
    },
    async createPayment(data:any){
     try {
@@ -146,29 +159,66 @@ export default {
     }
    },
 
-   async createSubscriber(data:any){
-
+   async createSubscriber(root:any, args:any){
+    try {
+      let data       = JSON.parse(JSON.stringify(args))
+      let subscriber = await new Subscriber(data);
+      return subscriber.save();
+    } catch (error) {
+      throw new Error(error);
+      
+    }
    },
-   async updateSubscriber(id: String, data :any){
+   async updateSubscriber( root:any, args:any, id: String, data :any){
+        try {
+         
 
+          let sub = await Subscriber.findOneAndUpdate({_id: id}, data);
+          if(sub)
+          {
+            return sub;
+          }
+          else {
+              throw new Error("Erreur");
+          }
+        } catch (error) {
+            throw new Error(error);
+            
+        }
    },
    async  deleteSubscriber(id: String){
-
+    return await Subscriber.findOneAndDelete({_id:id});
    },
+ // Subscription Mutations
+   async createSubscription(parent: any, args: any, context: any, info: any){
+      try {
+        let data_json = JSON.parse(JSON.stringify(args));
+        let data      = data_json['data'];
+        let item      =  await SubscriptionController.createSubscription(data);
+        return item;
 
-   async createSubscription(data:any){
-
+      } catch (error) {
+        throw new Error(error);
+      }
    },
-   async updateSubscription(id: String, data:any){
-
-   },
-   async deleteSubscription(id: String){
-     
-   },
+    async updateSubscription(parent: any, args: any, context: any, info: any){
+      try {
+        let data_json = JSON.parse(JSON.stringify(args));
+        const id = data_json.id;
+        let data = data_json['data'];
+       return SubscriptionController.updateSubscription(id, data);
+        
+      } catch (error) {
+        throw new Error("Error 500");
+      }
+    },
+    async deleteSubscription(id: String){
+      
+    },
  
-   async deleteUser(id: String){
+    async deleteUser(id: String){
 
-   }
+    }
 
    },
  
