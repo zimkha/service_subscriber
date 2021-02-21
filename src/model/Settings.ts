@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Model } from "mongoose";
 
 
 const SettingsSchema = new Schema({
@@ -10,9 +10,8 @@ const SettingsSchema = new Schema({
   give_consultation_note: {type: Boolean},
   prescription_editing: {type: Boolean},
   appointment_notification_sms: {type: Boolean},
-  billing_sms: {type: Boolean}
-
-}, {timestamps: true});
+  billing_sms: {type: Boolean},
+  teleconsultation_medical : {type: Boolean},}, {timestamps: true});
 
 
 export default model('Settings', SettingsSchema);

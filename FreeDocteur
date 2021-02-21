@@ -234,3 +234,16 @@ Subscription Storage
 
 
 
+RabbitMq
+
+npm install --save @types/amqplib
+
+dev dependencies
+
+
+
+
+
+
+
+
