@@ -7,13 +7,15 @@ import Payment from '../../model/Payment';
 import UserController from '../../controllers/userController';
 import SettingController from '../../controllers/settingController'
 import SubscriptionController from '../../controllers/subcriptionController';
+import SubscriberController from '../../controllers/subscriberController';
 
 
 export default {
 
    Query : {
-    async getUser(id: String){
+    async getUser(parent: any, args: any, context: any, info: any){
      try {
+       let id = args.id
         const user = await User.findOne({_id: id});
         if(user){
           return user;
@@ -56,10 +58,9 @@ export default {
         throw new Error(error);
       }
      }, 
-     async getOneSubscription(id: String){
-       
-       const subscripion = await Subscripion.findById({_id: id});
-       return subscripion;
+     async getOneSubscription(parent: any, args: any, context: any, info: any){
+        let id = args.id;
+        return await SubscriptionController.getOnSubscription(id);
      },
      async getSettings(){
       try {
@@ -212,14 +213,20 @@ export default {
         throw new Error("Error 500");
       }
     },
-    async deleteSubscription(id: String){
+    async deleteSubscription(parent: any, args: any, context: any, info: any){
       
     },
  
-    async deleteUser(id: String){
+    async deleteUser(parent: any, args: any, context: any, info: any){
 
-    }
+    },
 
-   },
- 
+    async linkSubscriptionToUser(parent: any, args: any, context: any, info: any){
+     let data =  JSON.parse(JSON.stringify(args));
+      return await SubscriberController.createSubscriber(data);
+    },
+  
+
+   }
+
 }

@@ -1,4 +1,3 @@
-import { delegateToSchema } from 'apollo-server-express';
 import { ObjectId } from 'mongodb'
 import Subscription from '../model/Subscription';
 
@@ -16,6 +15,7 @@ class SubscriptionController {
 
   static getOnSubscription(id: string) {
     let item = Subscription.findById({_id: id}, (err:any, docs:any) => {
+      console.log(item)
       if(!err) {
         return docs;
       }
